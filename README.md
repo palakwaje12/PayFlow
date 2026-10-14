@@ -145,11 +145,10 @@ Install the following before getting started:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/PayFlow-Payroll-Management-System.git
+git clone(https://github.com/palakwaje12/PayFlow.git)
 cd PayFlow-Payroll-Management-System
 ```
 
-Replace `YOUR-USERNAME` with your GitHub username and adjust the repository name if yours differs.
 
 ### 2. Create a Virtual Environment
 
@@ -277,8 +276,7 @@ These enhancements will be considered as the core application becomes more compl
 
 B.Tech Computer Engineering | Software Engineering
 
-GitHub: [YOUR-GITHUB-USERNAME](https://github.com/YOUR-GITHUB-USERNAME)
-
+GitHub: palakwaje12(https://github.com/palakwaje12)
 ---
 
 ⭐ If you find this project interesting, feel free to explore the repository and follow its development.
