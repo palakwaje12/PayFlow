@@ -1,0 +1,403 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFlow | HR Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">P</div>
+                <div>
+                    <h2>PayFlow</h2>
+                    <p>HR Management</p>
+                </div>
+            </div>
+
+            <p class="nav-heading">WORKSPACE</p>
+
+            <nav class="navigation">
+                <a href="#dashboard" class="nav-link active">
+                    <span class="nav-icon">▦</span> Dashboard
+                </a>
+                <a href="#employees" class="nav-link">
+                    <span class="nav-icon">♙</span> Employees
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-dot"></div>
+                <div>
+                    <strong>PayFlow System</strong>
+                    <p>Employee Management</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="dashboard">
+
+            <header class="topbar">
+                <div>
+                    <p class="eyebrow">WORKSPACE / OVERVIEW</p>
+                    <h1>HR Dashboard</h1>
+                    <p class="page-subtitle">
+                        Manage your workforce from one place.
+                    </p>
+                </div>
+
+                <div class="profile">
+                    <div class="profile-avatar">HR</div>
+                    <div>
+                        <strong>HR Administrator</strong>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+            </header>
+
+            <section class="welcome-banner">
+                <div>
+                    <p class="banner-label">PAYFLOW OVERVIEW</p>
+                    <h2>Welcome to your workspace</h2>
+                    <p>
+                        Keep employee information organized and up to date.
+                    </p>
+                </div>
+                <div class="banner-symbol" aria-hidden="true">✦</div>
+            </section>
+
+            <!-- Statistics -->
+            <section class="section-block">
+                <div class="section-heading">
+                    <div>
+                        <h2>Overview</h2>
+                        <p>Your employee management summary</p>
+                    </div>
+                    <button class="button button-secondary"
+                            id="refreshButton" type="button">
+                        ↻ Refresh
+                    </button>
+                </div>
+
+                <div class="stats-grid">
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span>Total Employees</span>
+                            <span class="stat-icon purple">♙</span>
+                        </div>
+                        <h3 id="totalEmployees">—</h3>
+                        <p class="stat-note">Employee records in the system</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span>Departments</span>
+                            <span class="stat-icon blue">▤</span>
+                        </div>
+                        <h3 id="totalDepartments">—</h3>
+                        <p class="stat-note">Departments represented</p>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-top">
+                            <span>Recently Joined</span>
+                            <span class="stat-icon green">↗</span>
+                        </div>
+                        <h3 id="recentEmployees">—</h3>
+                        <p class="stat-note">Joined in the last 30 days</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Add Employee Form -->
+            <section class="section-block form-section" id="addEmployee">
+                <div class="section-heading">
+                    <div>
+                        <h2>Add Employee</h2>
+                        <p>Enter the details of a new employee.</p>
+                    </div>
+                </div>
+
+                <form id="employeeForm">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="employeeId">Employee ID *</label>
+                                <input
+                                    id="employeeId"
+                                    name="employee_ID"
+                                    type="number"
+                                    min="1"
+                                    placeholder="e.g. 12"
+                                    required
+                             >
+                    </div>
+
+                        <div class="form-field">
+                            <label for="employeeName">Full Name *</label>
+                            <input id="employeeName" name="employee_name"
+                                   type="text" placeholder="e.g. Aarav Sharma"
+                                   required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="email">Email Address *</label>
+                            <input id="email" name="email" type="email"
+                                   placeholder="name@example.com" required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="phone">Phone Number *</label>
+                            <input id="phone" name="phone" type="tel"
+                                   placeholder="Enter phone number" required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="designation">Designation *</label>
+                            <input id="designation" name="designation"
+                                   type="text" placeholder="e.g. Software Engineer"
+                                   required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="joiningDate">Date of Joining *</label>
+                            <input id="joiningDate" name="Date_of_Joining"
+                                   type="date" required>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="bankAccount">Bank Account Number *</label>
+                            <input id="bankAccount" name="Bank_Account_No"
+                                   type="text" inputmode="numeric"
+                                   placeholder="Enter account number" required>
+                        </div>
+
+                        
+                           <div class="form-field">
+                            <label for="departmentId">Department *</label>
+                               <select id="departmentId" name="Department_ID" required>
+                             <option value="">Select department</option>
+                           </select>
+                       </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="button button-secondary">
+                            Clear Form
+                        </button>
+                        <button type="submit" class="button button-primary"
+                                id="addEmployeeButton">
+                            + Add Employee
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            
+<!-- Edit Employee Form -->
+<section class="section-block hidden" id="editEmployeeSection">
+    <div class="section-heading">
+        <div>
+            <h2>Edit Employee</h2>
+            <p>Update the selected employee's information.</p>
+        </div>
+    </div>
+
+    <form id="editEmployeeForm">
+        <input type="hidden" id="editEmployeeId">
+
+        <div class="form-grid">
+            <div class="form-field">
+                <label for="editEmployeeName">Full Name *</label>
+                <input id="editEmployeeName" type="text" required>
+            </div>
+
+            <div class="form-field">
+                <label for="editEmployeeEmail">Email Address *</label>
+                <input id="editEmployeeEmail" type="email" required>
+            </div>
+
+            <div class="form-field">
+                <label for="editEmployeePhone">Phone Number *</label>
+                <input id="editEmployeePhone" type="text" required>
+            </div>
+
+            <div class="form-field">
+                <label for="editEmployeeDesignation">Designation *</label>
+                <input id="editEmployeeDesignation" type="text" required>
+            </div>
+
+            <div class="form-field">
+                <label for="editEmployeeJoiningDate">Date of Joining *</label>
+                <input id="editEmployeeJoiningDate" type="date" required>
+            </div>
+
+            <div class="form-field">
+                <label for="editEmployeeBank">Bank Account Number *</label>
+                <input id="editEmployeeBank" type="text" required>
+            </div>
+
+            <div class="form-field">
+                <label for="editEmployeeDepartment">Department ID *</label>
+                <select id="editEmployeeDepartment" required>
+                    <option value="">Select department</option>
+                    <option value="101">101 - Human Resources</option>
+                    <option value="102">102 - Finance</option>
+                    <option value="103">103 - Information Technology</option>
+                    <option value="104">104 - Sales</option>
+                    <option value="105">105 - Administration</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="button button-secondary"
+                    id="cancelEditButton">Cancel</button>
+            <button type="submit" class="button button-primary">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</section>
+
+
+            <!-- Employee List -->
+            <section class="section-block employee-section" id="employees">
+    <div class="section-heading employee-heading">
+        <div>
+            <h2>Employee Directory</h2>
+            <p>Search, filter, and manage your employee records.</p>
+        </div>
+
+        <span class="record-count" id="recordCount">
+            Loading records...
+        </span>
+    </div>
+
+    <!-- Search and filters -->
+    <div class="directory-toolbar">
+        <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input
+                type="search"
+                id="employeeSearch"
+                placeholder="Search by name, email, or employee ID..."
+                aria-label="Search employees"
+            >
+        </div>
+
+        <select id="departmentFilter" aria-label="Filter by department">
+            <option value="all">All Departments</option>
+        </select>
+
+        <button class="button button-secondary"
+                id="clearFiltersButton" type="button">
+            Clear Filters
+        </button>
+    </div>
+
+    <div id="message" class="message hidden" role="status"
+         aria-live="polite"></div>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>EMPLOYEE</th>
+                    <th>EMAIL</th>
+                    <th>DESIGNATION</th>
+                    <th>JOINING DATE</th>
+                    <th>DEPARTMENT</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                <tr>
+                    <td colspan="6" class="table-state">
+                        Loading employees...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="directory-footer">
+        <span id="directorySummary">Showing all employees</span>
+    </div>
+</section>
+
+            <footer class="page-footer">
+                <span>PayFlow · Payroll Management System</span>
+                <span>Built with FastAPI and MySQL</span>
+            </footer>
+            
+<!-- Attendance Management -->
+<section class="section-block" id="attendanceSection">
+    <div class="section-header">
+        <div>
+            <h2>Attendance Management</h2>
+            <p>Mark and view employee attendance records.</p>
+        </div>
+    </div>
+
+    <form id="attendanceForm" class="employee-form">
+        <div class="form-field">
+            <label for="attendanceEmployee">Employee *</label>
+            <select id="attendanceEmployee" required>
+                <option value="">Select employee</option>
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label for="attendanceDate">Attendance Date *</label>
+            <input type="date" id="attendanceDate" required>
+        </div>
+
+        <div class="form-field">
+            <label for="attendanceStatus">Status *</label>
+            <select id="attendanceStatus" required>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Leave">Leave</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="button button-primary">
+                Mark Attendance
+            </button>
+        </div>
+    </form>
+
+    <div id="attendanceMessage" role="status"></div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Attendance ID</th>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="attendanceTableBody">
+                <tr>
+                    <td colspan="5">Loading attendance records...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+        </main>
+    </div>
+</body>
+</html>
