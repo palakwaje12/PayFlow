@@ -734,3 +734,245 @@ function initializeAttendance() {
 }
 
 document.addEventListener("DOMContentLoaded", initializeAttendance);
+
+
+/* =========================
+   PAYROLL MANAGEMENT
+========================= */
+
+async function loadPayrollEmployees() {
+    const select = document.getElementById("payrollEmployee");
+    if (!select) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/employees`);
+
+        if (!response.ok) {
+            throw new Error("Failed to load employees");
+        }
+
+        const employees = await response.json();
+
+        select.innerHTML = '<option value="">Select employee</option>';
+
+        employees.forEach(employee => {
+            const id = getEmployeeId(employee);
+            const option = document.createElement("option");
+
+            option.value = id;
+            option.textContent =
+                `${employee.employee_name} (ID: ${id})`;
+
+            select.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Payroll employee loading error:", error);
+        showMessage(
+            "payrollMessage",
+            "Could not load employees. Please refresh the page.",
+            "error"
+        );
+    }
+}
+
+async function loadPayrollTransactions() {
+    const tableBody = document.getElementById("payrollTableBody");
+    if (!tableBody) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/payroll-transactions`
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to load payroll transactions");
+        }
+
+        const records = await response.json();
+
+        tableBody.innerHTML = "";
+
+        let totalNetPay = 0;
+
+        if (records.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6">No payroll records found.</td>
+                </tr>`;
+        }
+
+        records.forEach(record => {
+            totalNetPay += Number(record.Net_pay) || 0;
+
+            const row = document.createElement("tr");
+
+            const values = [
+                record.payroll_id,
+                record.employee_name,
+                record.Month,
+                record.Year,
+                record.Payment_date,
+                `₹${Number(record.Net_pay).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}`
+            ];
+
+            values.forEach(value => {
+                const cell = document.createElement("td");
+                cell.textContent = value ?? "—";
+                row.appendChild(cell);
+            });
+
+            tableBody.appendChild(row);
+        });
+
+        document.getElementById("payrollTotalTransactions").textContent =
+            records.length;
+
+        document.getElementById("payrollTotalNetPay").textContent =
+            `₹${totalNetPay.toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+
+    } catch (error) {
+        console.error("Payroll history loading error:", error);
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6">Unable to load payroll records.</td>
+            </tr>`;
+    }
+}
+
+async function handlePayrollSubmit(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const message = document.getElementById("payrollMessage");
+
+    message.textContent = "Generating payroll...";
+    message.style.color = "";
+
+    const payload = {
+        employee_ID: Number(
+            document.getElementById("payrollEmployee").value
+        ),
+        Month: document.getElementById("payrollMonth").value,
+        Year: Number(
+            document.getElementById("payrollYear").value
+        ),
+        Payment_date:
+            document.getElementById("payrollPaymentDate").value
+    };
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/payroll-transactions`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                result.detail || "Could not generate payroll"
+            );
+        }
+
+        message.textContent =
+            `Payroll generated successfully! Net pay: ₹${Number(
+                result.Net_pay
+            ).toLocaleString("en-IN", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+
+        message.style.color = "green";
+
+        form.reset();
+
+        await loadPayrollTransactions();
+
+    } catch (error) {
+        message.textContent = error.message;
+        message.style.color = "red";
+    }
+}
+
+function initializePayroll() {
+    const form = document.getElementById("payrollForm");
+
+    if (!form || form.dataset.initialized === "true") return;
+
+    form.dataset.initialized = "true";
+
+    form.addEventListener("submit", handlePayrollSubmit);
+
+    loadPayrollEmployees();
+    loadPayrollTransactions();
+}
+
+document.addEventListener("DOMContentLoaded", initializePayroll);
+
+
+/* =========================
+   SIDEBAR SECTION NAVIGATION
+========================= */
+
+document.querySelectorAll(".navigation .nav-link").forEach(link => {
+    link.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        const target = this.getAttribute("href")
+            .replace("#", "")
+            .toLowerCase();
+
+        // Dashboard is the main workspace; Employees and Payroll
+        // are sections inside that workspace.
+        if (target === "dashboard") {
+            document.getElementById("dashboard").style.display = "";
+            document.getElementById("employees").style.display = "";
+            document.getElementById("payrollSection").style.display = "none";
+        } else if (target === "employees") {
+            document.getElementById("dashboard").style.display = "";
+            document.getElementById("employees").style.display = "";
+            document.getElementById("payrollSection").style.display = "none";
+
+            document.getElementById("employees").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        } else if (target === "payroll") {
+            document.getElementById("dashboard").style.display = "";
+            document.getElementById("employees").style.display = "none";
+            document.getElementById("payrollSection").style.display = "";
+
+            if (typeof loadPayrollEmployees === "function") {
+                loadPayrollEmployees();
+            }
+            if (typeof loadPayrollTransactions === "function") {
+                loadPayrollTransactions();
+            }
+
+            document.getElementById("payrollSection").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        } else {
+            return;
+        }
+
+        document.querySelectorAll(".navigation .nav-link")
+            .forEach(navLink => navLink.classList.remove("active"));
+
+        this.classList.add("active");
+    });
+});

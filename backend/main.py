@@ -30,7 +30,6 @@ class EmployeeUpdate(BaseModel):
     Bank_Account_No: str
     Department_ID: int
 
-
 class AttendanceCreate(BaseModel):
     employee_ID: int
     attendance_data: date
@@ -43,6 +42,12 @@ class SalaryStructureCreate(BaseModel):
     PF_deduction: Decimal = Field(default=0, ge=0)
     TAX_deduction: Decimal = Field(default=0, ge=0)
     Net_salary: Decimal = Field(gt=0)
+
+class PayrollTransactionCreate(BaseModel):
+    employee_ID: int
+    Month: str
+    Year: int = Field(ge=2000, le=2100)
+    Payment_date: date
 
 
 @app.get("/")               #create a get request to check if the API is running
@@ -522,3 +527,155 @@ def create_salary_structure(salary: SalaryStructureCreate):
         if cursor is not None:
             cursor.close()
         connection.close()
+
+
+@app.get("/payroll-transactions")
+def get_payroll_transactions():
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        query = """
+            SELECT
+                pt.payroll_id,
+                pt.employee_ID,
+                e.employee_name,
+                pt.Month,
+                pt.Year,
+                pt.Payment_date,
+                pt.Net_pay,
+                pt.trasaction_id
+            FROM Payroll_Transaction pt
+            JOIN Employee e
+                ON pt.employee_ID = e.employee_ID
+            ORDER BY pt.Year DESC, pt.Payment_date DESC,
+                     pt.payroll_id DESC
+        """
+
+        cursor.execute(query)
+        records = cursor.fetchall()
+
+        for record in records:
+            if record["Net_pay"] is not None:
+                record["Net_pay"] = float(record["Net_pay"])
+
+        return records
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.post("/payroll-transactions", status_code=201)
+def create_payroll_transaction(
+    transaction: PayrollTransactionCreate
+):
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        # 1. Check whether the employee exists
+        cursor.execute(
+            """
+            SELECT employee_ID
+            FROM Employee
+            WHERE employee_ID = %s
+            """,
+            (transaction.employee_ID,)
+        )
+        employee = cursor.fetchone()
+
+        if not employee:
+            raise HTTPException(
+                status_code=404,
+                detail="Employee not found"
+            )
+
+        # 2. Fetch the employee's saved net salary
+        cursor.execute(
+            """
+            SELECT Net_salary
+            FROM Salary_Structure
+            WHERE Employee_ID = %s
+            """,
+            (transaction.employee_ID,)
+        )
+        salary = cursor.fetchone()
+
+        if not salary:
+            raise HTTPException(
+                status_code=400,
+                detail="Salary structure not found for this employee"
+            )
+
+        # 3. Prevent duplicate payroll for the same month and year
+        cursor.execute(
+            """
+            SELECT payroll_id
+            FROM Payroll_Transaction
+            WHERE employee_ID = %s
+              AND LOWER(TRIM(Month)) = LOWER(TRIM(%s))
+              AND Year = %s
+            LIMIT 1
+            """,
+            (
+                transaction.employee_ID,
+                transaction.Month,
+                transaction.Year
+            )
+        )
+
+        existing = cursor.fetchone()
+
+        if existing:
+            raise HTTPException(
+                status_code=409,
+                detail="Payroll already exists for this employee, month and year"
+            )
+
+        # 4. Insert the new payroll transaction
+        cursor.execute(
+            """
+            INSERT INTO Payroll_Transaction
+                (employee_ID, Month, Year, Payment_date, Net_pay)
+            VALUES (%s, %s, %s, %s, %s)
+            """,
+            (
+                transaction.employee_ID,
+                transaction.Month.strip().title(),
+                transaction.Year,
+                transaction.Payment_date,
+                salary["Net_salary"]
+            )
+        )
+
+        new_payroll_id = cursor.lastrowid
+        conn.commit()
+
+        return {
+            "message": "Payroll transaction created successfully",
+            "payroll_id": new_payroll_id,
+            "employee_ID": transaction.employee_ID,
+            "Month": transaction.Month.strip().title(),
+            "Year": transaction.Year,
+            "Payment_date": transaction.Payment_date,
+            "Net_pay": float(salary["Net_salary"])
+        }
+
+    except HTTPException:
+        conn.rollback()
+        raise
+
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
