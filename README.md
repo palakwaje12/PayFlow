@@ -1,282 +1,236 @@
-# PayFlow — Payroll Management System
+# 💼 PayFlow — Payroll Management System
 
-A database-driven payroll management system built with **Python, FastAPI, and MySQL** to simplify employee record management and provide a foundation for automating payroll operations.
+A web-based **Payroll Management System** built to simplify employee management, attendance tracking, salary structure management, and payroll processing through a centralized HR dashboard.
 
-## 📌 About the Project
-
-**PayFlow** is a software project designed to manage employee information and streamline essential payroll-related operations within an organization.
-
-The project focuses on building a structured backend, designing a relational database, and developing RESTful APIs to perform employee management operations. It currently supports employee CRUD (Create, Read, Update, Delete) functionality, allowing employee records to be created, retrieved, updated, and deleted through API endpoints.
-
-The long-term goal is to extend PayFlow into a full-stack application with a user-friendly dashboard, attendance management, salary processing, and payroll transaction tracking.
-
-This project is being developed as a practical application of **Database Management Systems (DBMS), backend development, REST APIs, and full-stack software engineering**.
-
-## 🎯 Project Objectives
-
-- Digitize and organize employee records.
-- Implement CRUD operations through RESTful APIs.
-- Store and manage structured data using a relational database.
-- Establish a maintainable backend architecture.
-- Develop a user-friendly interface for employee and payroll management.
-- Extend the system towards attendance tracking and payroll processing.
+PayFlow combines a **FastAPI backend, MySQL database, and responsive frontend** to provide an organized interface for managing employee and payroll records.
 
 ## ✨ Features
 
-### Implemented
+### 👥 Employee Management
+- View employee records in an employee directory.
+- Add, update, and delete employee information.
+- Search and filter employees.
+- Retrieve employee information through REST API endpoints.
 
-- **Employee Management:** Create, retrieve, update, and delete employee records.
-- **RESTful API Development:** Built backend endpoints using FastAPI.
-- **MySQL Database Integration:** Connect the application to a relational database.
-- **API Documentation:** Explore and test endpoints through automatically generated Swagger UI.
-- **Structured Database Design:** Organize employee and payroll-related information across relational tables.
+### 📅 Attendance Management
+- Record employee attendance.
+- Retrieve attendance records through the backend API.
+- Maintain attendance information in the MySQL database.
 
-### In Development / Planned
+### 💰 Salary Structure Management
+- Manage employee salary structures.
+- Store salary components, including:
+  - House Rent Allowance (HRA)
+  - Dearness Allowance (DA)
+  - Provident Fund (PF) deduction
+  - Tax deduction
+  - Net salary
 
-- **Interactive Dashboard:** Build a frontend for accessing employee and payroll information.
-- **Employee Data Table:** Display employee records in a structured interface.
-- **Dashboard Statistics:** Present useful employee and payroll summaries.
-- **Attendance Management:** Track employee attendance records.
-- **Salary Management:** Manage salary structures and related information.
-- **Payroll Processing:** Develop payroll calculation and transaction-tracking functionality.
-- **Input Validation and Error Handling:** Improve data validation and provide meaningful error responses.
-- **Testing and Documentation:** Add systematic API testing and project documentation.
+### 🧾 Payroll Processing
+- Generate payroll transactions for employees with configured salary structures.
+- Calculate the recorded net pay from the employee's configured net salary.
+- Store payroll month, year, and payment date.
+- View payroll transaction history.
+- Display total payroll transactions and total net pay.
+- Validate employee records and prevent duplicate payroll entries for the same employee, month, and year.
 
-*Note: Planned features will be implemented progressively as the project evolves.*
+### 📊 HR Dashboard
+- Centralized dashboard interface.
+- Employee directory and payroll navigation.
+- Summary cards for payroll transactions and net pay.
+- A structured interface for extending HR analytics.
 
 ## 🛠️ Tech Stack
 
 | Technology | Purpose |
 |---|---|
-| Python | Core programming language and backend logic |
-| FastAPI | Building RESTful APIs |
-| MySQL | Relational database management |
-| MySQL Connector/Python | Connecting the backend to MySQL |
-| Pydantic | Request-data validation through FastAPI models |
-| HTML | Frontend structure — planned |
-| CSS | Frontend styling — planned |
-| JavaScript | Frontend interactions and API integration — planned |
-| Swagger UI | Interactive API documentation and testing |
+| HTML5 | Page structure |
+| CSS3 | Styling and layout |
+| JavaScript | Frontend interactions and API integration |
+| Python | Backend programming |
+| FastAPI | REST API development |
+| MySQL | Relational database |
+| SQL | Database queries and operations |
 | Git & GitHub | Version control and project hosting |
-| Visual Studio Code | Development environment |
 
-## 🏗️ System Architecture
-
-PayFlow follows a layered architecture in which the frontend communicates with the backend API, and the backend interacts with the MySQL database.
+## 🏗️ Application Architecture
 
 ```text
-           User
-             |
-             v
-    Frontend Dashboard
-     HTML / CSS / JS
-             |
-             v
-       FastAPI Backend
-       Python / Pydantic
-             |
-             v
-     Database Connector
-      MySQL Connector
-             |
-             v
-       MySQL Database
-             |
-             v
-  Employee and Payroll Data
-```
-
-The frontend is planned and is not yet part of the currently implemented application.
-
-## 🗄️ Database Design
-
-The project uses a MySQL database named `payrollmanagementsystemdb`.
-
-The database is organized around the following tables:
-
-| Table | Purpose |
-|---|---|
-| `Department` | Stores department-related information |
-| `Employee` | Stores employee details |
-| `Attendance` | Stores employee attendance records |
-| `Salary_Structure` | Stores salary structure information |
-| `Payroll_Transaction` | Stores payroll transaction records |
-
-These tables provide the foundation for connecting employee information with departments, attendance, salary structures, and payroll transactions.
-
-## 🔌 API Endpoints
-
-The current backend includes the following employee-management operations:
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/` | Check the API's root endpoint |
-| `GET` | `/test-db` | Test the database connection |
-| `GET` | `/employees` | Retrieve employee records |
-| `GET` | `/employees/{employee_id}` | Retrieve an employee by ID |
-| `POST` | `/employees` | Add a new employee |
-| `PUT` | `/employees/{employee_id}` | Update an existing employee |
-| `DELETE` | `/employees/{employee_id}` | Delete an employee |
-
-### Interactive API Documentation
-
-FastAPI automatically generates interactive API documentation, making it easy to inspect endpoints and send test requests.
-
-After starting the backend, visit:
-
-**Swagger UI:** http://127.0.0.1:8000/docs
-
-**ReDoc:** http://127.0.0.1:8000/redoc
-
-## 🚀 Getting Started
-
-Follow these steps to run the backend locally.
-
-### Prerequisites
-
-Install the following before getting started:
-
-- Python 3.10 or later
-- MySQL Server
-- MySQL Workbench (recommended)
-- Git
-- Visual Studio Code or another code editor
-
-### 1. Clone the Repository
-
-```bash
-git clone(https://github.com/palakwaje12/PayFlow.git)
-cd PayFlow-Payroll-Management-System
-```
-
-
-### 2. Create a Virtual Environment
-
-```bash
-python -m venv venv
-```
-
-Activate it on Windows:
-
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-If you're using Command Prompt instead of PowerShell:
-
-```cmd
-venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install fastapi uvicorn mysql-connector-python
-```
-
-### 4. Configure the MySQL Database
-
-1. Start your MySQL server.
-2. Open MySQL Workbench.
-3. Create or select the database `payrollmanagementsystemdb`.
-4. Execute the SQL scripts from the project's `database/` directory in the appropriate order.
-5. Configure the database connection credentials in the backend.
-
-**Important:** Never commit database passwords or other sensitive credentials to GitHub. Use environment variables or a local `.env` file for configuration.
-
-### 5. Start the Backend
-
-Run the following command from the project root:
-
-```bash
-uvicorn backend.main:app --reload
-```
-
-The API should start locally at:
-
-http://127.0.0.1:8000
-
-Open the interactive documentation to test the available endpoints:
-
-http://127.0.0.1:8000/docs
-
-## 📁 Project Structure
-
-The project is being organized into separate directories for backend logic, database scripts, and the planned frontend.
-
-```text
-PayFlow-Payroll-Management-System/
+PayFlow
 │
-├── backend/
-│   ├── main.py
-│   └── database.py
-│
-├── database/
-│   ├── schema.sql
-│   ├── insert_data.sql
-│   └── queries.sql
-│
-├── frontend/                 # Planned
+├── Frontend
 │   ├── index.html
 │   ├── style.css
 │   └── script.js
 │
-├── .gitignore
+├── Backend
+│   ├── main.py
+│   └── database.py
+│
+├── Database
+│   └── schema.sql
+│
+├── requirements.txt
 └── README.md
 ```
 
-The frontend files will be added as the dashboard is developed.
+*The directory structure above is illustrative. Adjust filenames and folders to match the actual repository.*
 
-## 🔒 Security and Reliability
+### How it works
 
-Security and reliability improvements planned for future development include:
+1. Users interact with the HR dashboard in the browser.
+2. JavaScript sends HTTP requests to the FastAPI backend.
+3. FastAPI validates requests and executes database operations.
+4. MySQL stores employee, attendance, salary, and payroll records.
+5. The frontend displays the returned data.
 
-- Moving database credentials into environment variables.
-- Validating incoming employee data.
-- Handling database errors and invalid requests gracefully.
-- Adding appropriate transaction handling.
-- Writing tests for API endpoints and database operations.
-- Exploring authentication and role-based access control.
+## 🚀 Getting Started
 
-## 🗺️ Development Roadmap
+Follow these steps to run PayFlow locally.
 
-- [x] Design the relational database schema.
-- [x] Connect FastAPI to MySQL.
-- [x] Implement employee CRUD APIs.
-- [x] Test API endpoints using Swagger UI.
-- [ ] Build the frontend dashboard.
-- [ ] Connect the frontend to the backend APIs.
-- [ ] Add dashboard statistics and employee search.
-- [ ] Implement attendance management APIs.
-- [ ] Develop salary management and payroll processing.
-- [ ] Add automated tests and improve error handling.
-- [ ] Complete documentation and deployment.
+### 1. Clone the repository
 
-## 🎓 Learning Outcomes
+```bash
+git clone https://github.com/palakwaje12/PayFlow.git
+cd PayFlow
+```
 
-Through this project, I am developing practical experience in:
+### 2. Create and activate a virtual environment
 
-- Designing relational databases and working with SQL.
-- Building RESTful APIs using FastAPI.
+**Windows PowerShell**
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+If PowerShell blocks activation, consult the Python documentation or activate the environment using the appropriate method for your terminal.
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If your project does not yet have a complete `requirements.txt`, ensure it includes the packages your backend actually imports, such as FastAPI, Uvicorn, and your chosen MySQL connector.
+
+### 4. Configure MySQL
+
+- Install and start MySQL Server.
+- Create the database `payrollmanagementsystemdb`, or use the database name configured in your project.
+- Import the project's database schema and required setup scripts.
+- Configure the database connection using your local environment settings.
+
+**Security:** Never commit real database passwords, API keys, or other credentials to GitHub. Use environment variables or a local `.env` file, and commit a `.env.example` containing placeholders instead.
+
+Example placeholder configuration:
+
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=payrollmanagementsystemdb
+DB_USER=your_mysql_username
+DB_PASSWORD=your_mysql_password
+```
+
+These variable names are examples; make sure they match the configuration expected by your backend.
+
+### 5. Start the FastAPI server
+
+Run the following command from the project root:
+
+```powershell
+uvicorn backend.main:app --reload
+```
+
+If your backend entry point is different, adjust the module path accordingly.
+
+### 6. Open PayFlow
+
+- **Web application:** http://127.0.0.1:8000/frontend/index.html
+- **API documentation:** http://127.0.0.1:8000/docs
+- **Alternative API documentation:** http://127.0.0.1:8000/redoc
+
+Keep the terminal running while using the application locally.
+
+## 🔌 API Overview
+
+The backend exposes REST endpoints for managing core payroll operations.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/employees` | Retrieve employee records |
+| POST | `/employees` | Add an employee |
+| GET | `/employees/{employee_id}` | Retrieve an employee |
+| PUT | `/employees/{employee_id}` | Update an employee |
+| DELETE | `/employees/{employee_id}` | Delete an employee |
+| GET | `/departments` | Retrieve departments |
+| GET | `/attendance` | Retrieve attendance records |
+| POST | `/attendance` | Add an attendance record |
+| GET | `/salary-structures` | Retrieve salary structures |
+| POST | `/salary-structures` | Add a salary structure |
+| GET | `/payroll-transactions` | Retrieve payroll history |
+| POST | `/payroll-transactions` | Generate a payroll transaction |
+
+Explore the interactive Swagger UI at `/docs` to inspect request parameters, schemas, and responses.
+
+## 🗄️ Database
+
+PayFlow uses MySQL to maintain relational records for its core modules.
+
+The database supports:
+- Employee and department information.
+- Attendance records.
+- Employee salary structures.
+- Payroll transaction history.
+
+Refer to the SQL files included in the repository for the actual table definitions and setup requirements.
+
+## 🔒 Security & Data Handling
+
+- Configure credentials locally rather than committing secrets.
+- Use sample or anonymized employee data when sharing the repository publicly.
+- Do not publish real employee personal information, salary details, or database backups.
+- Review database permissions before connecting the application to any shared or production database.
+
+**Note:** PayFlow is a learning project. Production use would require additional security controls, authentication and authorization, audit logging, deployment hardening, and appropriate protection of sensitive payroll data.
+
+## 🛣️ Future Enhancements
+
+Planned improvements may include:
+
+- [ ] Monthly payroll expenditure charts.
+- [ ] Department-wise workforce analytics.
+- [ ] Payroll report export to CSV.
+- [ ] Authentication and role-based access control.
+- [ ] Improved input validation and error handling.
+- [ ] Automated testing for API endpoints.
+- [ ] Cloud deployment.
+- [ ] Automated payroll calculations and payslip generation.
+
+## 🎯 Learning Outcomes
+
+This project provides practical experience with:
+
+- Building REST APIs using FastAPI.
 - Connecting Python applications to MySQL.
-- Implementing CRUD operations and request validation.
-- Understanding client-server architecture.
-- Using Git and GitHub for version control.
-- Progressively developing a full-stack application.
-
-## 🔮 Future Scope
-
-PayFlow can be extended into a more comprehensive payroll application with employee self-service, attendance-based salary calculations, payslip generation, payroll reports, authentication, and cloud deployment.
-
-These enhancements will be considered as the core application becomes more complete and reliable.
+- Implementing CRUD operations.
+- Integrating frontend interfaces with backend APIs.
+- Designing relational database workflows.
+- Handling validation, database errors, and payroll transactions.
+- Managing source code with Git and GitHub.
 
 ## 👩‍💻 Author
 
 **Palak Waje**
 
-B.Tech Computer Engineering | Software Engineering
+- GitHub: [@palakwaje12](https://github.com/palakwaje12)
+- LinkedIn: [Palak Waje](https://linkedin.com/in/palak-waje-031107370/)
 
-GitHub: palakwaje12(https://github.com/palakwaje12)
+## 📄 License
+
+This project is available for learning and educational purposes. If you want others to reuse, modify, or distribute the code, consider adding a `LICENSE` file with a suitable open-source license.
+
 ---
 
-⭐ If you find this project interesting, feel free to explore the repository and follow its development.
+⭐ If you find this project useful, consider starring the repository!
